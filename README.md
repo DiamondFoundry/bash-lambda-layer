@@ -150,6 +150,7 @@ Bash behaves in ways unlike other programming languages. As such, there are some
 - `$ scp`
 - `$ sftp`
 - `$ ssh`
+- `$ sshpass`
 - `$ time`
 - `$ traceroute`
 - `$ tree`
