@@ -13,6 +13,10 @@ publish:
 publish-staging:
 	@$(PWD)/publish-staging.sh
 
+publish-only:
+	@$(PWD)/publish-only.sh
+
+
 update-awscli:
 	docker run -it -v $(PWD):/root/bash-lambda-layer \
 		lambci/lambda:build-python3.6 \
