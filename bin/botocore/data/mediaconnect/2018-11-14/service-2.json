@@ -28,7 +28,7 @@
       "errors": [
         {
           "shape": "AddFlowOutputs420Exception",
-          "documentation": "AWS Elemental MediaConnect can't complete this request because this flow already has the maximum number of allowed outputs (20). For more information, contact AWS Customer Support."
+          "documentation": "AWS Elemental MediaConnect can't complete this request because this flow already has the maximum number of allowed outputs (50). For more information, contact AWS Customer Support."
         },
         {
           "shape": "BadRequestException",
@@ -55,7 +55,49 @@
           "documentation": "You have exceeded the service request rate limit for your AWS Elemental MediaConnect account."
         }
       ],
-      "documentation": "Adds outputs to an existing flow. You can create up to 20 outputs per flow."
+      "documentation": "Adds outputs to an existing flow. You can create up to 50 outputs per flow."
+    },
+    "AddFlowSources": {
+      "name": "AddFlowSources",
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/flows/{flowArn}/source",
+        "responseCode": 201
+      },
+      "input": {
+        "shape": "AddFlowSourcesRequest"
+      },
+      "output": {
+        "shape": "AddFlowSourcesResponse",
+        "documentation": "AWS Elemental MediaConnect added sources to the flow successfully."
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException",
+          "documentation": "The request that you submitted is not valid."
+        },
+        {
+          "shape": "InternalServerErrorException",
+          "documentation": "AWS Elemental MediaConnect can't fulfill your request because it encountered an unexpected condition."
+        },
+        {
+          "shape": "ForbiddenException",
+          "documentation": "You don't have the required permissions to perform this operation."
+        },
+        {
+          "shape": "NotFoundException",
+          "documentation": "AWS Elemental MediaConnect did not find the resource that you specified in the request."
+        },
+        {
+          "shape": "ServiceUnavailableException",
+          "documentation": "AWS Elemental MediaConnect is currently unavailable. Try again later."
+        },
+        {
+          "shape": "TooManyRequestsException",
+          "documentation": "You have exceeded the service request rate limit for your AWS Elemental MediaConnect account."
+        }
+      ],
+      "documentation": "Adds Sources to flow"
     },
     "CreateFlow": {
       "name": "CreateFlow",
@@ -97,7 +139,7 @@
           "documentation": "You have exceeded the service request rate limit for your AWS Elemental MediaConnect account."
         }
       ],
-      "documentation": "Creates a new flow. The request must include one source. The request optionally can include outputs (up to 20) and entitlements (up to 50)."
+      "documentation": "Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50)."
     },
     "DeleteFlow": {
       "name": "DeleteFlow",
@@ -369,6 +411,48 @@
       ],
       "documentation": "Removes an output from an existing flow. This request can be made only on an output that does not have an entitlement associated with it. If the output has an entitlement, you must revoke the entitlement instead. When an entitlement is revoked from a flow, the service automatically removes the associated output."
     },
+    "RemoveFlowSource": {
+      "name": "RemoveFlowSource",
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/v1/flows/{flowArn}/source/{sourceArn}",
+        "responseCode": 202
+      },
+      "input": {
+        "shape": "RemoveFlowSourceRequest"
+      },
+      "output": {
+        "shape": "RemoveFlowSourceResponse",
+        "documentation": "source successfully removed from flow configuration."
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException",
+          "documentation": "The request that you submitted is not valid."
+        },
+        {
+          "shape": "InternalServerErrorException",
+          "documentation": "AWS Elemental MediaConnect can't fulfill your request because it encountered an unexpected condition."
+        },
+        {
+          "shape": "ForbiddenException",
+          "documentation": "You don't have the required permissions to perform this operation."
+        },
+        {
+          "shape": "NotFoundException",
+          "documentation": "AWS Elemental MediaConnect did not find the resource that you specified in the request."
+        },
+        {
+          "shape": "ServiceUnavailableException",
+          "documentation": "AWS Elemental MediaConnect is currently unavailable. Try again later."
+        },
+        {
+          "shape": "TooManyRequestsException",
+          "documentation": "You have exceeded the service request rate limit for your AWS Elemental MediaConnect account."
+        }
+      ],
+      "documentation": "Removes a source from an existing flow. This request can be made only if there is more than one source on the flow."
+    },
     "RevokeFlowEntitlement": {
       "name": "RevokeFlowEntitlement",
       "http": {
@@ -546,6 +630,48 @@
         }
       ],
       "documentation": "Deletes specified tags from a resource."
+    },
+    "UpdateFlow": {
+      "name": "UpdateFlow",
+      "http": {
+        "method": "PUT",
+        "requestUri": "/v1/flows/{flowArn}",
+        "responseCode": 202
+      },
+      "input": {
+        "shape": "UpdateFlowRequest"
+      },
+      "output": {
+        "shape": "UpdateFlowResponse",
+        "documentation": "AWS Elemental MediaConnect updated the flow successfully."
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException",
+          "documentation": "The request that you submitted is not valid."
+        },
+        {
+          "shape": "InternalServerErrorException",
+          "documentation": "AWS Elemental MediaConnect can't fulfill your request because it encountered an unexpected condition."
+        },
+        {
+          "shape": "ForbiddenException",
+          "documentation": "You don't have the required permissions to perform this operation."
+        },
+        {
+          "shape": "NotFoundException",
+          "documentation": "AWS Elemental MediaConnect did not find the resource that you specified in the request."
+        },
+        {
+          "shape": "ServiceUnavailableException",
+          "documentation": "AWS Elemental MediaConnect is currently unavailable. Try again later."
+        },
+        {
+          "shape": "TooManyRequestsException",
+          "documentation": "You have exceeded the service request rate limit for your AWS Elemental MediaConnect account."
+        }
+      ],
+      "documentation": "Updates flow"
     },
     "UpdateFlowEntitlement": {
       "name": "UpdateFlowEntitlement",
@@ -729,9 +855,50 @@
         }
       }
     },
+    "AddFlowSourcesRequest": {
+      "type": "structure",
+      "members": {
+        "FlowArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "flowArn",
+          "documentation": "The flow that you want to mutate."
+        },
+        "Sources": {
+          "shape": "__listOfSetSourceRequest",
+          "locationName": "sources",
+          "documentation": "A list of sources that you want to add."
+        }
+      },
+      "documentation": "A request to add sources to the flow.",
+      "required": [
+        "FlowArn",
+        "Sources"
+      ]
+    },
+    "AddFlowSourcesResponse": {
+      "type": "structure",
+      "members": {
+        "FlowArn": {
+          "shape": "__string",
+          "locationName": "flowArn",
+          "documentation": "The ARN of the flow that these sources were added to."
+        },
+        "Sources": {
+          "shape": "__listOfSource",
+          "locationName": "sources",
+          "documentation": "The details of the newly added sources."
+        }
+      }
+    },
     "AddOutputRequest": {
       "type": "structure",
       "members": {
+        "CidrAllowList": {
+          "shape": "__listOf__string",
+          "locationName": "cidrAllowList",
+          "documentation": "The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
+        },
         "Description": {
           "shape": "__string",
           "locationName": "description",
@@ -767,10 +934,15 @@
           "locationName": "protocol",
           "documentation": "The protocol to use for the output."
         },
+        "RemoteId": {
+          "shape": "__string",
+          "locationName": "remoteId",
+          "documentation": "The remote ID for the Zixi-pull output stream."
+        },
         "SmoothingLatency": {
           "shape": "__integer",
           "locationName": "smoothingLatency",
-          "documentation": "The smoothing latency in milliseconds for RTP and RTP-FEC streams."
+          "documentation": "The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams."
         },
         "StreamId": {
           "shape": "__string",
@@ -780,8 +952,6 @@
       },
       "documentation": "The output that you want to add to this flow.",
       "required": [
-        "Destination",
-        "Port",
         "Protocol"
       ]
     },
@@ -855,11 +1025,18 @@
         "Source": {
           "shape": "SetSourceRequest",
           "locationName": "source"
+        },
+        "SourceFailoverConfig": {
+          "shape": "FailoverConfig",
+          "locationName": "sourceFailoverConfig"
+        },
+        "Sources": {
+          "shape": "__listOfSetSourceRequest",
+          "locationName": "sources"
         }
       },
-      "documentation": "Creates a new flow. The request must include one source. The request optionally can include outputs (up to 20) and entitlements (up to 50).",
+      "documentation": "Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50).",
       "required": [
-        "Source",
         "Name"
       ]
     },
@@ -986,6 +1163,11 @@
     "Entitlement": {
       "type": "structure",
       "members": {
+        "DataTransferSubscriberFeePercent": {
+          "shape": "__integer",
+          "locationName": "dataTransferSubscriberFeePercent",
+          "documentation": "Percentage from 0-100 of the data transfer cost to be billed to the subscriber."
+        },
         "Description": {
           "shape": "__string",
           "locationName": "description",
@@ -1018,6 +1200,21 @@
         "Subscribers",
         "Name"
       ]
+    },
+    "FailoverConfig": {
+      "type": "structure",
+      "members": {
+        "RecoveryWindow": {
+          "shape": "__integer",
+          "locationName": "recoveryWindow",
+          "documentation": "Search window time to look for dash-7 packets"
+        },
+        "State": {
+          "shape": "State",
+          "locationName": "state"
+        }
+      },
+      "documentation": "The settings for source failover"
     },
     "Flow": {
       "type": "structure",
@@ -1061,6 +1258,14 @@
           "shape": "Source",
           "locationName": "source"
         },
+        "SourceFailoverConfig": {
+          "shape": "FailoverConfig",
+          "locationName": "sourceFailoverConfig"
+        },
+        "Sources": {
+          "shape": "__listOfSource",
+          "locationName": "sources"
+        },
         "Status": {
           "shape": "Status",
           "locationName": "status",
@@ -1099,6 +1304,11 @@
     "GrantEntitlementRequest": {
       "type": "structure",
       "members": {
+        "DataTransferSubscriberFeePercent": {
+          "shape": "__integer",
+          "locationName": "dataTransferSubscriberFeePercent",
+          "documentation": "Percentage from 0-100 of the data transfer cost to be billed to the subscriber."
+        },
         "Description": {
           "shape": "__string",
           "locationName": "description",
@@ -1295,6 +1505,11 @@
     "ListedEntitlement": {
       "type": "structure",
       "members": {
+        "DataTransferSubscriberFeePercent": {
+          "shape": "__integer",
+          "locationName": "dataTransferSubscriberFeePercent",
+          "documentation": "Percentage from 0-100 of the data transfer cost to be billed to the subscriber."
+        },
         "EntitlementArn": {
           "shape": "__string",
           "locationName": "entitlementArn",
@@ -1396,6 +1611,11 @@
     "Output": {
       "type": "structure",
       "members": {
+        "DataTransferSubscriberFeePercent": {
+          "shape": "__integer",
+          "locationName": "dataTransferSubscriberFeePercent",
+          "documentation": "Percentage from 0-100 of the data transfer cost to be billed to the subscriber."
+        },
         "Description": {
           "shape": "__string",
           "locationName": "description",
@@ -1453,7 +1673,9 @@
       "enum": [
         "zixi-push",
         "rtp-fec",
-        "rtp"
+        "rtp",
+        "zixi-pull",
+        "rist"
       ]
     },
     "RemoveFlowOutputRequest": {
@@ -1489,6 +1711,42 @@
           "shape": "__string",
           "locationName": "outputArn",
           "documentation": "The ARN of the output that was removed."
+        }
+      }
+    },
+    "RemoveFlowSourceRequest": {
+      "type": "structure",
+      "members": {
+        "FlowArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "flowArn",
+          "documentation": "The flow that you want to remove a source from."
+        },
+        "SourceArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "sourceArn",
+          "documentation": "The ARN of the source that you want to remove."
+        }
+      },
+      "required": [
+        "FlowArn",
+        "SourceArn"
+      ]
+    },
+    "RemoveFlowSourceResponse": {
+      "type": "structure",
+      "members": {
+        "FlowArn": {
+          "shape": "__string",
+          "locationName": "flowArn",
+          "documentation": "The ARN of the flow that is associated with the source you removed."
+        },
+        "SourceArn": {
+          "shape": "__string",
+          "locationName": "sourceArn",
+          "documentation": "The ARN of the source that was removed."
         }
       }
     },
@@ -1586,12 +1844,12 @@
         "MaxBitrate": {
           "shape": "__integer",
           "locationName": "maxBitrate",
-          "documentation": "The smoothing max bitrate for RTP and RTP-FEC streams."
+          "documentation": "The smoothing max bitrate for RIST, RTP, and RTP-FEC streams."
         },
         "MaxLatency": {
           "shape": "__integer",
           "locationName": "maxLatency",
-          "documentation": "The maximum latency in milliseconds for Zixi-based streams."
+          "documentation": "The maximum latency in milliseconds. This parameter applies only to RIST-based and Zixi-based streams."
         },
         "Name": {
           "shape": "__string",
@@ -1611,7 +1869,7 @@
         "WhitelistCidr": {
           "shape": "__string",
           "locationName": "whitelistCidr",
-          "documentation": "The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
+          "documentation": "The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
         }
       },
       "documentation": "The settings for the source of the flow."
@@ -1619,6 +1877,11 @@
     "Source": {
       "type": "structure",
       "members": {
+        "DataTransferSubscriberFeePercent": {
+          "shape": "__integer",
+          "locationName": "dataTransferSubscriberFeePercent",
+          "documentation": "Percentage from 0-100 of the data transfer cost to be billed to the subscriber."
+        },
         "Decryption": {
           "shape": "Encryption",
           "locationName": "decryption",
@@ -1662,7 +1925,7 @@
         "WhitelistCidr": {
           "shape": "__string",
           "locationName": "whitelistCidr",
-          "documentation": "The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
+          "documentation": "The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
         }
       },
       "documentation": "The settings for the source of the flow.",
@@ -1706,6 +1969,13 @@
           "documentation": "The status of the flow when the StartFlow process begins."
         }
       }
+    },
+    "State": {
+      "type": "string",
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ]
     },
     "Status": {
       "type": "string",
@@ -1790,25 +2060,35 @@
     "Transport": {
       "type": "structure",
       "members": {
+        "CidrAllowList": {
+          "shape": "__listOf__string",
+          "locationName": "cidrAllowList",
+          "documentation": "The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
+        },
         "MaxBitrate": {
           "shape": "__integer",
           "locationName": "maxBitrate",
-          "documentation": "The smoothing max bitrate for RTP and RTP-FEC streams."
+          "documentation": "The smoothing max bitrate for RIST, RTP, and RTP-FEC streams."
         },
         "MaxLatency": {
           "shape": "__integer",
           "locationName": "maxLatency",
-          "documentation": "The maximum latency in milliseconds for Zixi-based streams."
+          "documentation": "The maximum latency in milliseconds. This parameter applies only to RIST-based and Zixi-based streams."
         },
         "Protocol": {
           "shape": "Protocol",
           "locationName": "protocol",
           "documentation": "The protocol that is used by the source or output."
         },
+        "RemoteId": {
+          "shape": "__string",
+          "locationName": "remoteId",
+          "documentation": "The remote ID for the Zixi-pull stream."
+        },
         "SmoothingLatency": {
           "shape": "__integer",
           "locationName": "smoothingLatency",
-          "documentation": "The smoothing latency in milliseconds for RTP and RTP-FEC streams."
+          "documentation": "The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams."
         },
         "StreamId": {
           "shape": "__string",
@@ -1893,6 +2173,21 @@
       },
       "documentation": "Information about the encryption of the flow."
     },
+    "UpdateFailoverConfig": {
+      "type": "structure",
+      "members": {
+        "RecoveryWindow": {
+          "shape": "__integer",
+          "locationName": "recoveryWindow",
+          "documentation": "Recovery window time to look for dash-7 packets"
+        },
+        "State": {
+          "shape": "State",
+          "locationName": "state"
+        }
+      },
+      "documentation": "The settings for source failover"
+    },
     "UpdateFlowEntitlementRequest": {
       "type": "structure",
       "members": {
@@ -1947,6 +2242,11 @@
     "UpdateFlowOutputRequest": {
       "type": "structure",
       "members": {
+        "CidrAllowList": {
+          "shape": "__listOf__string",
+          "locationName": "cidrAllowList",
+          "documentation": "The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
+        },
         "Description": {
           "shape": "__string",
           "locationName": "description",
@@ -1989,10 +2289,15 @@
           "locationName": "protocol",
           "documentation": "The protocol to use for the output."
         },
+        "RemoteId": {
+          "shape": "__string",
+          "locationName": "remoteId",
+          "documentation": "The remote ID for the Zixi-pull stream."
+        },
         "SmoothingLatency": {
           "shape": "__integer",
           "locationName": "smoothingLatency",
-          "documentation": "The smoothing latency in milliseconds for RTP and RTP-FEC streams."
+          "documentation": "The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams."
         },
         "StreamId": {
           "shape": "__string",
@@ -2017,6 +2322,34 @@
         "Output": {
           "shape": "Output",
           "locationName": "output"
+        }
+      }
+    },
+    "UpdateFlowRequest": {
+      "type": "structure",
+      "members": {
+        "FlowArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "flowArn",
+          "documentation": "The flow that you want to update."
+        },
+        "SourceFailoverConfig": {
+          "shape": "UpdateFailoverConfig",
+          "locationName": "sourceFailoverConfig"
+        }
+      },
+      "documentation": "A request to update flow.",
+      "required": [
+        "FlowArn"
+      ]
+    },
+    "UpdateFlowResponse": {
+      "type": "structure",
+      "members": {
+        "Flow": {
+          "shape": "Flow",
+          "locationName": "flow"
         }
       }
     },
@@ -2052,12 +2385,12 @@
         "MaxBitrate": {
           "shape": "__integer",
           "locationName": "maxBitrate",
-          "documentation": "The smoothing max bitrate for RTP and RTP-FEC streams."
+          "documentation": "The smoothing max bitrate for RIST, RTP, and RTP-FEC streams."
         },
         "MaxLatency": {
           "shape": "__integer",
           "locationName": "maxLatency",
-          "documentation": "The maximum latency in milliseconds for Zixi-based streams."
+          "documentation": "The maximum latency in milliseconds. This parameter applies only to RIST-based and Zixi-based streams."
         },
         "Protocol": {
           "shape": "Protocol",
@@ -2078,7 +2411,7 @@
         "WhitelistCidr": {
           "shape": "__string",
           "locationName": "whitelistCidr",
-          "documentation": "The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
+          "documentation": "The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
         }
       },
       "documentation": "A request to update the source of a flow.",
@@ -2145,6 +2478,24 @@
       "type": "list",
       "member": {
         "shape": "Output"
+      }
+    },
+    "__listOfSetSourceRequest": {
+      "type": "list",
+      "member": {
+        "shape": "SetSourceRequest"
+      }
+    },
+    "__listOfSource": {
+      "type": "list",
+      "member": {
+        "shape": "Source"
+      }
+    },
+    "__listOf__integer": {
+      "type": "list",
+      "member": {
+        "shape": "__integer"
       }
     },
     "__listOf__string": {

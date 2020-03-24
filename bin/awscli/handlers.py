@@ -72,7 +72,6 @@ from awscli.customizations.rekognition import register_rekognition_detect_labels
 from awscli.customizations.removals import register_removals
 from awscli.customizations.route53 import register_create_hosted_zone_doc_fix
 from awscli.customizations.s3.s3 import s3_plugin_initialize
-from awscli.customizations.s3endpoint import register_s3_endpoint
 from awscli.customizations.s3errormsg import register_s3_error_msg
 from awscli.customizations.scalarparse import register_scalar_parser
 from awscli.customizations.sessendemail import register_ses_send_email
@@ -87,6 +86,7 @@ from awscli.customizations.servicecatalog import register_servicecatalog_command
 from awscli.customizations.s3events import register_event_stream_arg
 from awscli.customizations.sessionmanager import register_ssm_session
 from awscli.customizations.sms_voice import register_sms_voice_hide
+from awscli.customizations.dynamodb import register_dynamodb_paginator_fix
 
 
 def awscli_initialize(event_handlers):
@@ -139,7 +139,6 @@ def awscli_initialize(event_handlers):
     eks_initialize(event_handlers)
     ecs_initialize(event_handlers)
     register_cloudsearchdomain(event_handlers)
-    register_s3_endpoint(event_handlers)
     register_generate_cli_skeleton(event_handlers)
     register_assume_role_provider(event_handlers)
     register_add_waiters(event_handlers)
@@ -176,3 +175,4 @@ def awscli_initialize(event_handlers):
     dlm_initialize(event_handlers)
     register_ssm_session(event_handlers)
     register_sms_voice_hide(event_handlers)
+    register_dynamodb_paginator_fix(event_handlers)
