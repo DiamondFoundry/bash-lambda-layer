@@ -2,6 +2,9 @@
 .vscode
 export
 
+# Download bin/package
+bin/kv2json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

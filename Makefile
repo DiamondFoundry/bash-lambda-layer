@@ -2,7 +2,7 @@ SHELL = /usr/bin/env bash -xe
 
 PWD := $(shell pwd)
 
-build:
+build: bin/kv2json
 	@rm -rf export
 	@mkdir export
 	@zip -yr export/layer.zip bootstrap bin lib libexec share
@@ -25,6 +25,10 @@ update-awscli:
 		lambci/lambda:build-python3.6 \
 		bash -c /root/bash-lambda-layer/update-awscli.sh
 
+bin/kv2json:
+	cd bin/ \
+		&& curl -sOL https://raw.githubusercontent.com/Songmu/App-KV2JSON/master/kv2json \
+		&& chmod +x kv2json
 
 .PHONY: \
 	build
