@@ -2,7 +2,7 @@
 
 # AWS Regions
 REGIONS=(
-    "us-west-2"
+    "${AWS_REGION:?no-region}"
 )
 LAYER_NAME="bash-testing"
 
