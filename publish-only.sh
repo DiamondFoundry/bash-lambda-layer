@@ -2,7 +2,7 @@
 GIT_VER=$(git describe --tags)
 DATE=$(date +%Y-%m-%dT%H:%M:%S%z)
 DESCRIPTION="Bash in AWS Lambda version $GIT_VER [https://github.com/kayac/bash-lambda-layer]
-published in $DATE
+published at $DATE
 "
 
 # AWS Regions
