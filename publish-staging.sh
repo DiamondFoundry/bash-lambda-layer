@@ -1,16 +1,31 @@
 #!/bin/bash -e
+GIT_VER=$(git describe --tags)
+DATE=$(date +%Y-%m-%dT%H:%M:%S%z)
+DESCRIPTION="Bash in AWS Lambda version $GIT_VER [https://github.com/kayac/bash-lambda-layer]
+published at $DATE
+"
 
 # AWS Regions
 REGIONS=(
-    "us-west-2"
+    "${AWS_REGION:?no-region}"
 )
 LAYER_NAME="bash-testing"
 
 for region in ${REGIONS[@]}; do
     echo "Publishing layer to $region..."
 
-    LAYER_ARN=$(aws lambda publish-layer-version --region $region --layer-name $LAYER_NAME --description "Bash in AWS Lambda [https://github.com/gkrizek/bash-lambda-layer]" --compatible-runtimes provided --license MIT --zip-file fileb://export/layer.zip | jq -r .LayerVersionArn)
-    
+    LAYER_ARN=$(aws lambda publish-layer-version --region $region --layer-name $LAYER_NAME --description "$DESCRIPTION" --compatible-runtimes provided --license MIT --zip-file fileb://export/layer.zip | jq -r .LayerVersionArn)
+    if [ -n "$PERMISSION" ]; then
+        POLICY=$(aws lambda add-layer-version-permission \
+            --region $region \
+            --layer-name $LAYER_NAME \
+            --version-number $(echo -n $LAYER_ARN | tail -c 1) \
+            --statement-id $LAYER_NAME-public \
+            --action lambda:GetLayerVersion \
+            $PERMISSION)
+        echo $POLICY
+    fi
+
     echo $LAYER_ARN
     echo "$region complete for Staging"
     echo ""
