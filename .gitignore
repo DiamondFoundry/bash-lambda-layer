@@ -4,6 +4,11 @@ export
 
 # Download bin/package
 bin/kv2json
+aws
+awscliv2.zip
+bin/aws
+bin/aws_completer
+bin/awscli
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
