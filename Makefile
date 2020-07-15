@@ -2,7 +2,7 @@ SHELL = /usr/bin/env bash -xe
 AWSCLI_VERSION := 2.0.30
 PWD := $(shell pwd)
 
-build_on_docker:
+build_on_docker: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 	docker build -t bash-lambda-layer-builder docker/builder
 	docker run -it -v $(PWD):/root/bash-lambda-layer -v $(PWD)/bin:/opt/bin \
 		--workdir="/root/bash-lambda-layer" \
@@ -33,8 +33,8 @@ archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip:
 # Custom runtimes are deployed in the /opt/ directory.
 # AWS CLI v2 install path is /opt/bin/awscli
 awscli: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
+	unzip -q archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip -d /tmp
 	cd /tmp \
-		&& unzip -q /root/bash-lambda-layer/archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip \
 		&& rm -rf ./aws/dist/awscli/examples \
 		&& ./aws/install -i /opt/bin/awscli -b /opt/bin --update \
 		&& rm -rf aws
