@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: for install awscli /opt/bin symbolic link
+        run: ln -s $GITHUB_WORKSPACE/bin /opt/bin
       - name: Build Layer
         run: |
           make packages
