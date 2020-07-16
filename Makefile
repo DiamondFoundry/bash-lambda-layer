@@ -4,7 +4,7 @@ PWD := $(shell pwd)
 
 build_on_docker: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 	docker build -t bash-lambda-layer-builder docker/builder
-	docker run -it -v $(PWD):/root/bash-lambda-layer -v $(PWD)/bin:/opt/bin \
+	docker run -v $(PWD):/root/bash-lambda-layer -v $(PWD)/bin:/opt/bin \
 		--workdir="/root/bash-lambda-layer" \
 		bash-lambda-layer-builder \
 		make build
