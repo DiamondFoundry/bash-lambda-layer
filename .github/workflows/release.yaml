@@ -14,15 +14,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build Layer
+      - name: Build Layer on docker
         run: |
           make build_on_docker
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Create Release Package
-        run: |
-          make packages
       - name: Create a Release
         id: create_release
         uses: actions/create-release@v1

@@ -13,8 +13,6 @@ build: bin/kv2json awscli
 	@rm -rf export
 	@mkdir export
 	@zip -yr export/layer.zip bootstrap bin lib libexec share
-
-packages: export/layer.zip
 	@zip -yr export/bash-lambda-layer.zip export/layer.zip publish.sh publish-only.sh README.publish.md
 
 publish:
