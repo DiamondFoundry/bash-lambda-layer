@@ -9,7 +9,7 @@ Respect for the original gkrizek/bash-lambda-layer.
 ### ARN
 
 ```
-arn:aws:lambda:<region>:513375597510:layer:bash:2
+arn:aws:lambda:<region>:513375597510:layer:bash:4
 ```
 
 ### tools version
