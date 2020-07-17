@@ -4,7 +4,7 @@ PWD := $(shell pwd)
 
 build_on_docker: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 	docker build -t bash-lambda-layer-builder docker/builder
-	docker run -it -v $(PWD):/root/bash-lambda-layer -v $(PWD)/bin:/opt/bin \
+	docker run -v $(PWD):/root/bash-lambda-layer -v $(PWD)/bin:/opt/bin \
 		--workdir="/root/bash-lambda-layer" \
 		bash-lambda-layer-builder \
 		make build
@@ -13,8 +13,6 @@ build: bin/kv2json awscli
 	@rm -rf export
 	@mkdir export
 	@zip -yr export/layer.zip bootstrap bin lib libexec share
-
-packages: build
 	@zip -yr export/bash-lambda-layer.zip export/layer.zip publish.sh publish-only.sh README.publish.md
 
 publish:

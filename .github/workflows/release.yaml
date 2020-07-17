@@ -14,9 +14,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build Layer
+      - name: Build Layer on docker
         run: |
-          make packages
+          make build_on_docker
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -51,6 +51,7 @@ jobs:
           asset_name: bash-lambda-layer.zip
           asset_content_type: application/zip
       - name: Publish
+        if: contains(github.ref, 'alpha') != true
         run: |
           make publish
         env:
