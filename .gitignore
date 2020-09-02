@@ -9,6 +9,7 @@ awscliv2.zip
 bin/aws
 bin/aws_completer
 bin/awscli
+bin/jq
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

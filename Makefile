@@ -1,5 +1,6 @@
 SHELL = /usr/bin/env bash -xe
 AWSCLI_VERSION := 2.0.30
+JQ_VERSION := 1.6
 PWD := $(shell pwd)
 
 build_on_docker: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
@@ -41,6 +42,11 @@ bin/kv2json:
 	cd bin/ \
 		&& curl -sOL https://raw.githubusercontent.com/Songmu/App-KV2JSON/master/kv2json \
 		&& chmod +x kv2json
+
+bin/jq:
+	cd bin/ \
+		&& curl -o jq -sL https://github.com/stedolan/jq/releases/download/jq-$(JQ_VERSION)/jq-linux64 \
+		&& chmod +x jq
 
 clean:
 	rm -f bin/aws
