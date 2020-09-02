@@ -3,7 +3,7 @@ AWSCLI_VERSION := 2.0.30
 JQ_VERSION := 1.6
 PWD := $(shell pwd)
 
-build_on_docker: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
+build_on_docker: yumda archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 	docker build -t bash-lambda-layer-builder docker/builder
 	docker run -v $(PWD):/root/bash-lambda-layer -v $(PWD)/bin:/opt/bin \
 		--workdir="/root/bash-lambda-layer" \
@@ -15,6 +15,9 @@ build: awscli bin/jq
 	@mkdir export
 	@zip -yr export/layer.zip bootstrap bin lib share
 	@zip -yr export/bash-lambda-layer.zip export/layer.zip publish.sh publish-only.sh README.publish.md
+
+yumda:
+	docker run --rm -v $(PWD):/lambda/opt lambci/yumda:2 yum install -y zip-3.0 unzip-6.0
 
 publish:
 	@$(PWD)/publish.sh
@@ -59,3 +62,4 @@ clean:
 	publish
 	publish-staging
 	awscli
+	yumda
