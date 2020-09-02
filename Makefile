@@ -10,7 +10,7 @@ build_on_docker: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 		bash-lambda-layer-builder \
 		make build
 
-build: bin/kv2json awscli
+build: awscli bin/jq
 	@rm -rf export
 	@mkdir export
 	@zip -yr export/layer.zip bootstrap bin lib libexec share
@@ -37,11 +37,6 @@ awscli: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 		&& rm -rf ./aws/dist/awscli/examples \
 		&& ./aws/install -i /opt/bin/awscli -b /opt/bin --update \
 		&& rm -rf aws
-
-bin/kv2json:
-	cd bin/ \
-		&& curl -sOL https://raw.githubusercontent.com/Songmu/App-KV2JSON/master/kv2json \
-		&& chmod +x kv2json
 
 bin/jq:
 	cd bin/ \

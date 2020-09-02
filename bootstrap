@@ -13,7 +13,11 @@ export AWS_CONFIG_FILE="/tmp/.aws/config"
 sendInitError () {
   ERROR_MESSAGE=$1
   ERROR_TYPE=$2
-  ERROR=$(kv2json errorMessage="$ERROR_MESSAGE" errorType="$ERROR_TYPE" )
+  ERROR=$(jq -n \
+    --arg em "$ERROR_MESSAGE" \
+    --arg et="$ERROR_TYPE" \
+    '{errorMessage: $em, errorType: $et}'
+  )
   curl -sS -X POST -d "$ERROR" --header "Lambda-Runtime-Function-Error-Type: Unhandled" "http://${AWS_LAMBDA_RUNTIME_API}/${RUNTIME_PATH}/init/error" > /dev/null
 }
 
@@ -23,7 +27,12 @@ sendRuntimeError () {
   ERROR_MESSAGE=$2
   ERROR_TYPE=$3
   STACK_TRACE=$4
-  ERROR=$(kv2json errorMessage="$ERROR_MESSAGE" errorType="$ERROR_TYPE" stackTrace="$STACK_TRACE")
+  ERROR=$(jq -n \
+    --arg em "$ERROR_MESSAGE" \
+    --arg et="$ERROR_TYPE" \
+    --arg st="$STACK_TRACE"\
+    '{errorMessage: $em, errorType: $et, stackTrace: $st}'
+  )
   curl -sS -X POST -d "$ERROR" --header "Lambda-Runtime-Function-Error-Type: Unhandled" "http://${AWS_LAMBDA_RUNTIME_API}/${RUNTIME_PATH}/invocation/${REQUEST_ID}/error" > /dev/null
 
 }
