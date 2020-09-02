@@ -11,7 +11,7 @@ LAYER_NAME="bash"
 
 echo "Publishing layer to $region..."
 
-LAYER_ARN=$(aws lambda publish-layer-version --region $region --layer-name $LAYER_NAME --description "$DESCRIPTION" --compatible-runtimes provided --license MIT --zip-file fileb://export/layer.zip | jq -r .LayerVersionArn)
+LAYER_ARN=$(aws lambda publish-layer-version --region $region --layer-name $LAYER_NAME --description "$DESCRIPTION" --compatible-runtimes provided.al2 --license MIT --zip-file fileb://export/layer.zip | jq -r .LayerVersionArn)
 if [ -n "$PERMISSION" ]; then
     POLICY=$(aws lambda add-layer-version-permission \
         --region $region \
