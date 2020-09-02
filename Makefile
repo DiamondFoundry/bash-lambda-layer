@@ -13,7 +13,7 @@ build_on_docker: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 build: awscli bin/jq
 	@rm -rf export
 	@mkdir export
-	@zip -yr export/layer.zip bootstrap bin lib libexec share
+	@zip -yr export/layer.zip bootstrap bin lib share
 	@zip -yr export/bash-lambda-layer.zip export/layer.zip publish.sh publish-only.sh README.publish.md
 
 publish:
@@ -44,11 +44,15 @@ bin/jq:
 		&& chmod +x jq
 
 clean:
-	rm -f bin/aws
-	rm -rf bin/awscli
-	rm -f bin/aws_completer
-	rm -f bin/kv2json
-	rm -f archives/*.zip
+	rm -rf bin/
+	mkdir bin
+	touch bin/.gitkeep
+	rm -rf share/
+	mkdir share
+	touch share/.gitkeep
+	rm -rf lib/
+	mkdir lib
+	touch lib/.gitkeep
 
 .PHONY: \
 	build
