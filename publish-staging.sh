@@ -19,7 +19,7 @@ for region in ${REGIONS[@]}; do
         POLICY=$(aws lambda add-layer-version-permission \
             --region $region \
             --layer-name $LAYER_NAME \
-            --version-number $(echo -n $LAYER_ARN | tail -c 1) \
+            --version-number $(echo -n $LAYER_ARN | awk -F':' '{print $8}') \
             --statement-id $LAYER_NAME-public \
             --action lambda:GetLayerVersion \
             $PERMISSION)
