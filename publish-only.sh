@@ -7,7 +7,7 @@ published at $DATE
 
 # AWS Regions
 region=${AWS_REGION:?no-region}
-LAYER_NAME="bash"
+LAYER_NAME="bash-al2"
 
 echo "Publishing layer to $region..."
 

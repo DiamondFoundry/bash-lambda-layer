@@ -24,7 +24,7 @@ REGIONS=(
     "eu-west-3"
     "sa-east-1"
 )
-LAYER_NAME="bash"
+LAYER_NAME="bash-al2"
 
 for region in ${REGIONS[@]}; do
     echo "Publishing layer to $region..."

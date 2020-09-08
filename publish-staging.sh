@@ -9,7 +9,7 @@ published at $DATE
 REGIONS=(
     "${AWS_REGION:?no-region}"
 )
-LAYER_NAME="bash-testing"
+LAYER_NAME="bash-al2-staging"
 
 for region in ${REGIONS[@]}; do
     echo "Publishing layer to $region..."
