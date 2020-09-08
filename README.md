@@ -1,4 +1,4 @@
-# Bash in AWS Lambda  [Modified by Kayac inc.]
+# Bash in AWS Lambda [Modified by Kayac inc.]
 
 forked [gkrizek/bash-lambda-layer](https://github.com/gkrizek/bash-lambda-layer) because we needed to modify and maintain it in our organization.
 Respect for the original gkrizek/bash-lambda-layer.
@@ -9,23 +9,37 @@ Click [here](https://github.com/gkrizek/bash-lambda-layer/commit/703b0ade8174022
 ## Difference from the original
 
 ### compatible runtimes
+
 only `provided.al2`
 
 ### ARN
+
+#### for Amazon Linux 2 (`provided.al2`)
+
+```
+arn:aws:lambda:<region>:513375597510:layer:bash-al2:1
+```
+
+#### for Amazon Linux 1 (`provided`)
+
+**This is deprecated. It will not be maintained in the future. Please use AL2 for new Lambda functions.**
 
 ```
 arn:aws:lambda:<region>:513375597510:layer:bash:4
 ```
 
 ### tools version
+
 In kayac/bash-lambda-layer,the following executables.
-* AWS CLI v2.0.30
-* jq 1.6
-* zip 3.0
-* unzip 6.0
+
+- AWS CLI v2.0.30
+- jq 1.6
+- zip 3.0
+- unzip 6.0
 
 ### function
-* Error handling using jq, for json escape.
+
+- Error handling using jq, for json escape.
 
 ## How to publish to local AWS account.
 
