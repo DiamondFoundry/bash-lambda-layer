@@ -1,19 +1,23 @@
 SHELL = /usr/bin/env bash -xe
 AWSCLI_VERSION := 2.0.30
+JQ_VERSION := 1.6
 PWD := $(shell pwd)
 
-build_on_docker: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
+build_on_docker: yumda archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 	docker build -t bash-lambda-layer-builder docker/builder
 	docker run -v $(PWD):/root/bash-lambda-layer -v $(PWD)/bin:/opt/bin \
 		--workdir="/root/bash-lambda-layer" \
 		bash-lambda-layer-builder \
 		make build
 
-build: bin/kv2json awscli
+build: awscli bin/jq
 	@rm -rf export
 	@mkdir export
-	@zip -yr export/layer.zip bootstrap bin lib libexec share
+	@zip -yr export/layer.zip bootstrap bin lib share
 	@zip -yr export/bash-lambda-layer.zip export/layer.zip publish.sh publish-only.sh README.publish.md
+
+yumda:
+	docker run --rm -v $(PWD):/lambda/opt lambci/yumda:2 yum install -y zip-3.0 unzip-6.0
 
 publish:
 	@$(PWD)/publish.sh
@@ -37,20 +41,25 @@ awscli: archives/awscli-exe-linux-x86_64-$(AWSCLI_VERSION).zip
 		&& ./aws/install -i /opt/bin/awscli -b /opt/bin --update \
 		&& rm -rf aws
 
-bin/kv2json:
+bin/jq:
 	cd bin/ \
-		&& curl -sOL https://raw.githubusercontent.com/Songmu/App-KV2JSON/master/kv2json \
-		&& chmod +x kv2json
+		&& curl -o jq -sL https://github.com/stedolan/jq/releases/download/jq-$(JQ_VERSION)/jq-linux64 \
+		&& chmod +x jq
 
 clean:
-	rm -f bin/aws
-	rm -rf bin/awscli
-	rm -f bin/aws_completer
-	rm -f bin/kv2json
-	rm -f archives/*.zip
+	rm -rf bin/
+	mkdir bin
+	touch bin/.gitkeep
+	rm -rf share/
+	mkdir share
+	touch share/.gitkeep
+	rm -rf lib/
+	mkdir lib
+	touch lib/.gitkeep
 
 .PHONY: \
 	build
 	publish
 	publish-staging
 	awscli
+	yumda
