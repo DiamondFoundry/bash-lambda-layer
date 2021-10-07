@@ -1,5 +1,11 @@
 # Bash in AWS Lambda
 
+## NO LONGER SUPPORTED
+
+This repository and layer is no longer receiving updates or support. I've been too busy to keep up with changes in the Lambda environment and this has fallen behind. Use at your own risk. 
+
+---
+
 Run Bash in [AWS Lambda](https://aws.amazon.com/lambda/) via [Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html). This Layer is 100% Bash and handles all communication with the Lambda Runtime API. This allows you to run full Bash scripts and commands inside of AWS Lambda. This Layer also includes common CLI tools used in Bash scripts.
 
 See the [How To](#how-to) section to understand how to use these layers. Also see the [example-basic.sh](examples/example-basic.sh) file for an example of how to write a Bash script compatible with this Layer.
@@ -7,7 +13,7 @@ See the [How To](#how-to) section to understand how to use these layers. Also se
 ### ARN
 
 ```
-arn:aws:lambda:<region>:744348701589:layer:bash:5
+arn:aws:lambda:<region>:744348701589:layer:bash:8
 ```
 
 ## How To
@@ -36,7 +42,7 @@ $ aws lambda create-function \
     --role bashFunctionRole \
     --handler index.handler \
     --runtime provided \
-    --layers arn:aws:lambda:<region>:744348701589:layer:bash:5 \
+    --layers arn:aws:lambda:<region>:744348701589:layer:bash:8 \
     --zip-file fileb://function.zip
 ```
 
@@ -61,7 +67,7 @@ $ aws lambda create-function \
 ```
 $ aws lambda update-function-configuration \
     --function-name bashFunction \
-    --layers arn:aws:lambda:<region>:744348701589:layer:bash:5
+    --layers arn:aws:lambda:<region>:744348701589:layer:bash:8
 ```
 
 ### Writing Scripts
@@ -140,6 +146,22 @@ Bash behaves in ways unlike other programming languages. As such, there are some
 
     `AWS_LAMBDA_TRACE_ID` - The sampling decision, trace ID, and parent segment ID of AWS XRay
 
+### Building
+
+To build a layer, simply run `make build`. This will create a zip archive of the layer in the `export/` directory.
+
+### Publishing
+
+To publish the layer to the public, simply run `make publish`. This will create a new version of the layer from the `export/layer.zip` file (create from the Build step) and give it a global read permission.
+
+### Adding New Executables
+
+Some executables are able to run by themselves and some require additional dependencies that are present on the server. It's hard to cover here case here, but if the executable run by itself it can easily be added. If it has dependencies, you must explore what those dependencies are and how to add them to the layer as well.
+
+You can either add the executable from an Amazon Linux AMI or from the [lambci/lambda:build-python3.6](https://github.com/lambci/docker-lambda) Docker image.
+
+_Disclaimer: I usually don't add in executables from pull requests for security reasons. If you would like to see an executable in this layer make an issue and I'll try to add it._
+
 ### Included Executables
 
 - `$ aws`
@@ -155,7 +177,9 @@ Bash behaves in ways unlike other programming languages. As such, there are some
 - `$ traceroute`
 - `$ tree`
 - `$ wget`
+- `$ vim`
 - `$ zip`
+- `$ unzip`
 
 **Already included in the Lambda environment:**
 
