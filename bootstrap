@@ -31,7 +31,7 @@ sendRuntimeError () {
 sendResponse () {
   REQUEST_ID=$1
   REQUEST_RESPONSE_FILE=$2
-  cat $REQUEST_RESPONSE_FILE | curl -sS -X POST -d @- "http://${AWS_LAMBDA_RUNTIME_API}/${RUNTIME_PATH}/invocation/${REQUEST_ID}/response" > /dev/null
+  curl -sS -X POST -d @${REQUEST_RESPONSE_FILE} "http://${AWS_LAMBDA_RUNTIME_API}/${RUNTIME_PATH}/invocation/${REQUEST_ID}/response" > /dev/null
 }
 
 # Make sure handler file exists
