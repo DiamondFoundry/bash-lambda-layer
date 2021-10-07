@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - "!**/*"
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    name: Build Layer and Release Asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build Layer on docker
+        run: |
+          make build_on_docker
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Create a Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload a Release Asset for only layer.zip
+        id: upload-release-asset-layer
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./export/layer.zip
+          asset_name: layer.zip
+          asset_content_type: application/zip
+      - name: Upload a Release Asset for deploy package
+        id: upload-release-asset-package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./export/bash-lambda-layer.zip
+          asset_name: bash-lambda-layer.zip
+          asset_content_type: application/zip
+      - name: Publish
+        if: contains(github.ref, 'alpha') != true
+        run: |
+          make publish
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

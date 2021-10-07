@@ -2,6 +2,16 @@
 .vscode
 export
 
+# Download bin/package
+aws
+awscliv2.zip
+bin/
+!bin/.gitkeep
+share/
+!share/.gitkeep
+lib/
+!lib/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

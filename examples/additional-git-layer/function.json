@@ -1,0 +1,12 @@
+{
+  "FunctionName": "bash-lambda-layer-example-additional-git-layer",
+  "Handler": "index.handler",
+  "MemorySize": 128,
+  "Layers": [
+    "{{must_env `BASH_LAYER_ARN`}}",
+    "{{must_env `GIT_LAYER_ARN`}}"
+  ],
+  "Role": "{{must_env `LAMBDA_IAM_ARN`}}",
+  "Runtime": "provided.al2",
+  "Timeout": 30
+}
